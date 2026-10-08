@@ -1,249 +1,286 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Noryflow — L'agent qui répond quand vous ne pouvez pas</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Noryflow : un assistant vocal qui répond aux appels des artisans</title>
+<meta name="description" content="Noryflow décroche quand vous êtes sur un chantier, note le nom, le numéro, l'adresse et la demande, puis vous envoie un résumé par e-mail. Essai de 2 semaines sans engagement.">
+<meta name="theme-color" content="#0D1B4A">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="Noryflow : un assistant vocal pour les artisans">
+<meta property="og:description" content="Il décroche quand vous ne pouvez pas, vous recevez un résumé de l'appel par e-mail.">
+<meta property="og:image" content="https://noryflow.github.io/logo.png">
+<link rel="preload" href="fonts/montserrat-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "Noryflow",
+  "url": "https://noryflow.github.io/",
+  "email": "contact.noryflow@gmail.com",
+  "description": "Assistant vocal qui répond aux appels manqués des artisans et leur envoie un résumé par e-mail.",
+  "areaServed": "FR"
+}
+</script>
 <style>
-  :root {
-    --ink: #0D1657;
-    --ink-soft: #1A2470;
-    --ivory: #F6F3EC;
-    --ivory-dim: #ECE7DC;
-    --brass: #C08A34;
-    --brass-bright: #E0A94E;
-    --signal: #4C8368;
-    --line: rgba(246,243,236,0.14);
-    --line-dark: rgba(14,22,38,0.12);
-    --text-on-dark: #F6F3EC;
-    --text-on-dark-dim: rgba(246,243,236,0.68);
-    --text-on-light: #16202F;
-    --text-on-light-dim: rgba(22,32,47,0.64);
-    --radius: 3px;
-    --font-display: 'Fraunces', serif;
-    --font-body: 'Inter', sans-serif;
-  }
-  * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; scroll-padding-top: env(safe-area-inset-top, 0px); }
-  body {
-    margin: 0; background: var(--ivory); color: var(--text-on-light);
-    font-family: var(--font-body); line-height: 1.5; -webkit-font-smoothing: antialiased;
-    padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px);
-  }
-  img, svg { max-width: 100%; display: block; }
-  a { color: inherit; }
-  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 28px; }
-  header.site {
-    position: sticky; top: 0; top: env(safe-area-inset-top, 0px); z-index: 40;
-    background: rgba(246,243,236,0.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line-dark);
-  }
-  .nav { display: flex; align-items: center; justify-content: space-between; padding: 16px 28px; max-width: 1120px; margin: 0 auto; }
-  .brand { display: flex; align-items: center; gap: 10px; font-family: var(--font-display); font-weight: 600; font-size: 1.15rem; letter-spacing: 0.01em; text-decoration: none; color: var(--text-on-light); }
-  .brand .mark { width: 30px; height: 30px; border-radius: 50%; background: var(--ink); color: var(--ivory); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 700; font-size: 1rem; }
-  nav.links { display: flex; gap: 28px; font-size: 0.92rem; }
-  nav.links a { text-decoration: none; color: var(--text-on-light-dim); transition: color .15s; }
-  nav.links a:hover, nav.links a:focus-visible { color: var(--text-on-light); }
-  .nav-cta { background: var(--ink); color: var(--ivory) !important; padding: 10px 20px; border-radius: var(--radius); text-decoration: none; font-size: 0.88rem; font-weight: 600; white-space: nowrap; }
-  .nav-cta:hover { background: var(--ink-soft); }
-  .menu-toggle { display: none; }
-  @media (max-width: 760px) {
-    nav.links { display: none; }
-    .menu-toggle { display: inline-flex; background: none; border: none; font-size: 1.4rem; color: var(--text-on-light); cursor: pointer; }
-  }
-  .hero { background: var(--ink); color: var(--text-on-dark); padding: 72px 0 88px; position: relative; overflow: hidden; }
-  .hero::after { content: ""; position: absolute; right: -180px; top: -180px; width: 480px; height: 480px; border-radius: 50%; background: radial-gradient(circle, rgba(224,169,78,0.18), transparent 70%); pointer-events: none; }
-  .hero-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 56px; align-items: center; }
-  @media (max-width: 860px) { .hero-grid { grid-template-columns: 1fr; } }
-  .eyebrow { font-size: 0.82rem; color: var(--brass-bright); margin-bottom: 18px; font-weight: 600; }
-  h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(2.1rem, 4.4vw, 3.3rem); line-height: 1.08; margin: 0 0 22px; max-width: 15ch; }
-  .hero p.lede { font-size: 1.1rem; color: var(--text-on-dark-dim); max-width: 46ch; margin: 0 0 34px; }
-  .cta-row { display: flex; gap: 14px; flex-wrap: wrap; }
-  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 26px; border-radius: var(--radius); font-weight: 600; font-size: 0.95rem; text-decoration: none; border: 1px solid transparent; cursor: pointer; }
-  .btn-primary { background: var(--brass); color: var(--ink); }
-  .btn-primary:hover { background: var(--brass-bright); }
-  .btn-ghost { border-color: var(--line); color: var(--text-on-dark); background: transparent; }
-  .btn-ghost:hover { border-color: rgba(246,243,236,0.4); }
-  .phone-mock { background: var(--ink-soft); border: 1px solid var(--line); border-radius: 14px; padding: 22px; max-width: 380px; margin: 0 auto; }
-  .phone-mock .top { display: flex; align-items: center; gap: 10px; padding-bottom: 14px; margin-bottom: 14px; border-bottom: 1px solid var(--line); }
-  .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--signal); }
-  .phone-mock .top span { font-size: 0.8rem; color: var(--text-on-dark-dim); }
-  .bubble { padding: 12px 14px; border-radius: 10px; font-size: 0.88rem; margin-bottom: 10px; max-width: 88%; opacity: 0; transform: translateY(6px); animation: rise 0.5s ease forwards; }
-  .bubble.caller { background: rgba(246,243,236,0.08); color: var(--text-on-dark); }
-  .bubble.agent { background: var(--brass); color: var(--ink); margin-left: auto; }
-  @keyframes rise { to { opacity: 1; transform: translateY(0); } }
-  .status-line { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 0.78rem; color: var(--text-on-dark-dim); display: flex; align-items: center; gap: 8px; opacity: 0; animation: rise 0.5s ease forwards; }
-  section { padding: 84px 0; }
-  .section-head { max-width: 58ch; margin-bottom: 52px; }
-  .section-head .tag { font-size: 0.82rem; color: var(--brass); font-weight: 600; margin-bottom: 12px; }
-  h2 { font-family: var(--font-display); font-weight: 600; font-size: clamp(1.6rem, 3vw, 2.2rem); margin: 0 0 16px; line-height: 1.18; }
-  .section-head p { color: var(--text-on-light-dim); font-size: 1.02rem; max-width: 52ch; }
-  .problem { background: var(--ivory); }
-  .problem-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line-dark); border: 1px solid var(--line-dark); }
-  @media (max-width: 760px) { .problem-grid { grid-template-columns: 1fr; } }
-  .problem-card { background: var(--ivory); padding: 34px 30px; }
-  .problem-card .stat { font-family: var(--font-display); font-size: 2.4rem; color: var(--ink); margin-bottom: 10px; line-height: 1; }
-  .problem-card p { color: var(--text-on-light-dim); font-size: 0.95rem; margin: 0; }
-  .how { background: var(--ink); color: var(--text-on-dark); }
-  .how .section-head p { color: var(--text-on-dark-dim); }
-  .how .section-head .tag { color: var(--brass-bright); }
-  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
-  @media (max-width: 860px) { .steps { grid-template-columns: 1fr; gap: 36px; } }
-  .step .num { font-family: var(--font-display); font-size: 1.1rem; color: var(--brass-bright); border: 1px solid var(--line); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
-  .step h3 { font-family: var(--font-body); font-weight: 600; font-size: 1.06rem; margin: 0 0 10px; }
-  .step p { color: var(--text-on-dark-dim); font-size: 0.93rem; margin: 0; }
-  .forwho { background: var(--ivory-dim); }
-  .trade-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line-dark); border: 1px solid var(--line-dark); }
-  @media (max-width: 760px) { .trade-list { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 480px) { .trade-list { grid-template-columns: 1fr; } }
-  .trade { background: var(--ivory-dim); padding: 24px 26px; display: flex; align-items: baseline; gap: 14px; }
-  .trade .glyph { font-family: var(--font-display); font-size: 1rem; color: var(--brass); min-width: 22px; }
-  .trade span.label { font-weight: 600; font-size: 0.98rem; }
-  .offer { background: var(--ink); color: var(--text-on-dark); border-radius: 16px; padding: 56px; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 44px; align-items: center; }
-  @media (max-width: 860px) { .offer { grid-template-columns: 1fr; padding: 40px 28px; } }
-  .offer h2 { color: var(--text-on-dark); }
-  .offer p { color: var(--text-on-dark-dim); }
-  .offer-list { list-style: none; margin: 22px 0 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
-  .offer-list li { display: flex; gap: 10px; align-items: flex-start; font-size: 0.95rem; color: var(--text-on-dark); }
-  .offer-list li::before { content: "—"; color: var(--brass-bright); flex-shrink: 0; }
-  .offer-card { background: var(--ink-soft); border: 1px solid var(--line); border-radius: 12px; padding: 30px; text-align: center; }
-  .offer-card .price { font-family: var(--font-display); font-size: 2.6rem; color: var(--brass-bright); margin: 6px 0 4px; }
-  .offer-card .price small { font-size: 1rem; color: var(--text-on-dark-dim); }
-  .offer-card .sub { font-size: 0.85rem; color: var(--text-on-dark-dim); margin-bottom: 22px; }
-  .contact { text-align: center; }
-  .contact .section-head { margin: 0 auto 40px; text-align: center; }
-  .contact-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
-  .contact-detail { margin-top: 40px; color: var(--text-on-light-dim); font-size: 0.92rem; }
-  .contact-detail a { text-decoration: underline; text-underline-offset: 3px; }
-  footer { border-top: 1px solid var(--line-dark); padding: 32px 0; padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px)); }
-  .footer-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 0.82rem; color: var(--text-on-light-dim); }
-  @media (prefers-reduced-motion: reduce) { .bubble, .status-line { animation: none; opacity: 1; transform: none; } }
+@font-face {
+  font-family: "Montserrat";
+  src: url("fonts/montserrat-latin-wght-normal.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --navy: #0D1B4A;
+  --navy-deep: #081239;
+  --paper: #F3F5FA;
+  --white: #FFFFFF;
+  --signal: #FFB800;
+  --text-on-navy: #C3CAE3;
+  --text-on-paper: #44506F;
+  --line-on-navy: rgba(255, 255, 255, 0.2);
+  --line-on-paper: #CFD5E8;
+  --font: "Montserrat", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --gutter: clamp(1.25rem, 5vw, 3rem);
+  --max: 72rem;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  font-family: var(--font);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--navy);
+  background: var(--paper);
+}
+img { display: block; max-width: 100%; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--signal); outline-offset: 3px; border-radius: 3px; }
+
+.wrap { width: 100%; max-width: var(--max); margin: 0 auto; padding-inline: var(--gutter); }
+.on-navy { background: var(--navy); color: var(--white); }
+.on-navy p { color: var(--text-on-navy); }
+
+/* En-tête */
+.top { background: var(--navy); color: var(--white); }
+.top .wrap { display: flex; align-items: center; justify-content: space-between; padding-block: 1rem; }
+.brand { display: flex; align-items: center; gap: 0.85rem; text-decoration: none; }
+.brand img { width: 2.5rem; height: 2.5rem; border-radius: 0.5rem; }
+.brand span { font-weight: 300; letter-spacing: 0.24em; font-size: 0.95rem; }
+.top-link { font-weight: 600; font-size: 0.95rem; text-decoration: none; border-bottom: 2px solid var(--signal); padding-bottom: 2px; }
+
+/* Accueil */
+.hero { background: var(--navy); color: var(--white); padding-block: clamp(2.5rem, 7vw, 5.5rem) clamp(3rem, 8vw, 6.5rem); }
+.hero .wrap { display: grid; gap: clamp(2.5rem, 6vw, 4.5rem); align-items: center; }
+.hero h1 {
+  margin: 0 0 1.25rem;
+  font-size: clamp(2.15rem, 6.2vw, 3.9rem);
+  line-height: 1.06;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  max-width: 14em;
+}
+.hero .lead { margin: 0 0 2rem; font-size: clamp(1.05rem, 2.2vw, 1.2rem); max-width: 34em; color: var(--text-on-navy); }
+.actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.75rem; }
+.btn {
+  display: inline-block;
+  background: var(--signal);
+  color: var(--navy);
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+  padding: 0.95rem 1.5rem;
+  border-radius: 0.4rem;
+}
+.btn:hover { background: #FFC933; }
+.text-link { font-weight: 600; text-decoration-thickness: 2px; text-underline-offset: 0.3em; }
+
+/* Résumé d'appel (exemple) */
+.summary {
+  background: var(--white);
+  color: var(--navy);
+  border-radius: 0.6rem;
+  overflow: hidden;
+  box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.55);
+  max-width: 28rem;
+  width: 100%;
+}
+.summary-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: 0.9rem 1.25rem; background: #E8ECF8; border-bottom: 1px solid var(--line-on-paper); }
+.summary-head strong { font-size: 0.95rem; }
+.summary-head span { font-size: 0.8rem; color: var(--text-on-paper); }
+.summary dl { margin: 0; padding: 0.4rem 1.25rem 0.9rem; }
+.row { display: grid; grid-template-columns: 6.5rem 1fr; gap: 0.75rem; padding: 0.7rem 0; border-bottom: 1px solid #E3E7F3; font-size: 0.95rem; }
+.row:last-child { border-bottom: 0; }
+.row dt { color: var(--text-on-paper); font-weight: 500; }
+.row dd { margin: 0; font-weight: 600; }
+.urgent { display: inline-block; background: var(--signal); color: var(--navy); font-weight: 800; padding: 0.05rem 0.55rem; border-radius: 0.25rem; }
+
+@keyframes noted { from { opacity: 0; transform: translateY(0.4rem); } to { opacity: 1; transform: none; } }
+.row { animation: noted 0.45s ease-out both; }
+.row:nth-child(1) { animation-delay: 0.3s; }
+.row:nth-child(2) { animation-delay: 0.7s; }
+.row:nth-child(3) { animation-delay: 1.1s; }
+.row:nth-child(4) { animation-delay: 1.5s; }
+.row:nth-child(5) { animation-delay: 1.9s; }
+.row:nth-child(6) { animation-delay: 2.3s; }
+
+/* Sections claires */
+.section { padding-block: clamp(3rem, 8vw, 5.5rem); }
+.section h2 { margin: 0 0 1rem; font-size: clamp(1.6rem, 3.6vw, 2.4rem); line-height: 1.15; font-weight: 700; letter-spacing: -0.015em; max-width: 18em; }
+.section p { margin: 0 0 1rem; color: var(--text-on-paper); max-width: 40em; }
+
+.steps { display: grid; gap: 0; margin-top: 2.5rem; padding: 0; list-style: none; }
+.step { padding: 1.75rem 0; border-top: 1px solid var(--line-on-paper); }
+.step-num { display: block; font-size: 3.25rem; line-height: 1; font-weight: 800; letter-spacing: -0.04em; margin-bottom: 0.75rem; }
+.step h3 { margin: 0 0 0.5rem; font-size: 1.2rem; font-weight: 700; }
+.step p { margin: 0; }
+
+.split { display: grid; gap: 1.5rem; }
+.who { background: var(--white); }
+
+/* Essai */
+.trial { background: var(--navy); color: var(--white); padding-block: clamp(3rem, 8vw, 5.5rem); }
+.trial .wrap { display: grid; gap: 2.5rem; }
+.trial h2 { margin: 0 0 1rem; font-size: clamp(1.7rem, 4vw, 2.7rem); line-height: 1.12; font-weight: 800; letter-spacing: -0.02em; max-width: 14em; }
+.trial p { color: var(--text-on-navy); max-width: 32em; margin: 0 0 1.75rem; }
+.promises { margin: 0; padding: 0; list-style: none; }
+.promises li { position: relative; padding: 1.1rem 0 1.1rem 1.6rem; border-top: 1px solid var(--line-on-navy); color: var(--text-on-navy); }
+.promises li:last-child { border-bottom: 1px solid var(--line-on-navy); }
+.promises li::before { content: ""; position: absolute; left: 0; top: 1.65rem; width: 0.6rem; height: 0.6rem; background: var(--signal); }
+.promises strong { color: var(--white); font-weight: 700; }
+
+/* Pied de page */
+.foot { background: var(--navy-deep); color: var(--text-on-navy); padding-block: 2.5rem 3rem; font-size: 0.9rem; }
+.foot .wrap { display: grid; gap: 1.5rem; }
+.foot h2 { margin: 0 0 0.4rem; font-size: 0.95rem; font-weight: 700; color: var(--white); }
+.foot p { margin: 0 0 0.35rem; max-width: 46em; }
+.foot a { color: var(--white); }
+
+@media (min-width: 52rem) {
+  .hero .wrap { grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); }
+  .summary { justify-self: end; }
+  .steps { grid-template-columns: repeat(3, 1fr); }
+  .step { padding: 2rem 2rem 0.5rem 0; border-top: 2px solid var(--navy); }
+  .step + .step { padding-left: 2rem; border-left: 1px solid var(--line-on-paper); }
+  .split { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 4rem; }
+  .trial .wrap { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 4rem; align-items: start; }
+  .foot .wrap { grid-template-columns: 1fr 1fr; gap: 4rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .row { animation: none; }
+}
 </style>
 </head>
 <body>
-<header class="site">
-  <div class="nav">
-    <a href="#top" class="brand"><span class="mark">N</span>Noryflow</a>
-    <nav class="links">
-      <a href="#probleme">Le problème</a>
-      <a href="#fonctionnement">Comment ça marche</a>
-      <a href="#metiers">Pour qui</a>
-      <a href="#offre">L'offre</a>
-    </nav>
-    <a href="mailto:contact.noryflow@gmail.com?subject=Demande%20de%20d%C3%A9mo%20Noryflow&body=Bonjour%2C%0A%0AJe%20souhaite%20voir%20une%20d%C3%A9monstration%20de%20l'agent%20vocal%20Noryflow.%0A%0AMon%20activit%C3%A9%20%3A%20%0ADisponibilit%C3%A9%20%3A%20%0A%0AMerci." class="nav-cta">Réserver une démo</a>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#" aria-label="Noryflow, accueil">
+      <img src="apple-touch-icon.png" alt="" width="40" height="40">
+      <span>NORYFLOW</span>
+    </a>
+    <a class="top-link" href="mailto:contact.noryflow@gmail.com">Contact</a>
   </div>
 </header>
-<main id="top">
+
+<main>
   <section class="hero">
-    <div class="wrap hero-grid">
+    <div class="wrap">
       <div>
-        <div class="eyebrow">Standard téléphonique automatisé</div>
-        <h1>Chaque appel manqué part chez le concurrent.</h1>
-        <p class="lede">Noryflow met en place un assistant vocal qui répond au téléphone à votre place — en intervention, ou en dehors de vos horaires de travail. Il prend les coordonnées, note la demande, et vous transmet tout par SMS.</p>
-        <div class="cta-row">
-          <a href="mailto:contact.noryflow@gmail.com?subject=Demande%20de%20d%C3%A9mo%20Noryflow&body=Bonjour%2C%0A%0AJe%20souhaite%20voir%20une%20d%C3%A9monstration%20de%20l'agent%20vocal%20Noryflow.%0A%0AMon%20activit%C3%A9%20%3A%20%0ADisponibilit%C3%A9%20%3A%20%0A%0AMerci." class="btn btn-primary">Réserver une démo</a>
-          <a href="#fonctionnement" class="btn btn-ghost">Voir comment ça marche</a>
+        <h1>Vous êtes sur un chantier. Votre assistant décroche.</h1>
+        <p class="lead">Noryflow répond aux appels que vous ne pouvez pas prendre. Il note le nom, le numéro, l'adresse et la demande du client, puis vous envoie un résumé par <span style="white-space:nowrap">e-mail</span>.</p>
+        <div class="actions">
+          <a class="btn" href="mailto:contact.noryflow@gmail.com?subject=Essai%20gratuit%20de%202%20semaines&amp;body=Bonjour%2C%0A%0AJe%20suis%20(votre%20m%C3%A9tier)%20%C3%A0%20(votre%20ville).%20J%27aimerais%20essayer%20Noryflow.%0A%0AMon%20num%C3%A9ro%20%3A%20">Demander l'essai gratuit</a>
+          <a class="text-link" href="#fonctionnement">Voir comment ça marche</a>
         </div>
       </div>
-      <div class="phone-mock" aria-hidden="true">
-        <div class="top"><span class="dot"></span><span>Appel entrant — 09:14</span></div>
-        <div class="bubble caller" style="animation-delay:.1s">« Allô, j'ai une fuite sous l'évier, vous pouvez passer aujourd'hui ? »</div>
-        <div class="bubble agent" style="animation-delay:.6s">« Je note votre demande. Le prochain créneau disponible est à 15h, ça vous convient ? »</div>
-        <div class="bubble caller" style="animation-delay:1.1s">« Parfait, oui. »</div>
-        <div class="status-line" style="animation-delay:1.6s"><span class="dot"></span> SMS de confirmation envoyé</div>
+
+      <figure class="summary" style="margin:0" aria-label="Exemple de résumé d'appel reçu par e-mail">
+        <div class="summary-head"><strong>Appel reçu</strong><span>Exemple de résumé</span></div>
+        <dl>
+          <div class="row"><dt>Nom</dt><dd>Durand</dd></div>
+          <div class="row"><dt>Prénom</dt><dd>Marie</dd></div>
+          <div class="row"><dt>Téléphone</dt><dd>06 12 34 56 78</dd></div>
+          <div class="row"><dt>Adresse</dt><dd>8 avenue des Lilas, Pau</dd></div>
+          <div class="row"><dt>Motif</dt><dd>Rénovation de cuisine</dd></div>
+          <div class="row"><dt>Urgent</dt><dd><span class="urgent">OUI</span></dd></div>
+        </dl>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section" id="fonctionnement">
+    <div class="wrap">
+      <h2>Vous gardez votre numéro. L'assistant prend les appels que vous ne prenez pas.</h2>
+      <ol class="steps">
+        <li class="step">
+          <span class="step-num" aria-hidden="true">1</span>
+          <h3>L'appel est renvoyé</h3>
+          <p>Quand vous ne répondez pas, votre téléphone renvoie l'appel vers un numéro français relié à Noryflow. Vos clients composent toujours votre numéro habituel.</p>
+        </li>
+        <li class="step">
+          <span class="step-num" aria-hidden="true">2</span>
+          <h3>L'assistant décroche</h3>
+          <p>Il se présente au nom de votre entreprise, demande le nom, le numéro, l'adresse du chantier et ce que veut le client, puis fait un récapitulatif pour vérifier.</p>
+        </li>
+        <li class="step">
+          <span class="step-num" aria-hidden="true">3</span>
+          <h3>Vous recevez le résumé</h3>
+          <p>Un e-mail arrive juste après l'appel, avec l'urgence signalée. Vous rappelez qui vous voulez, quand vous voulez.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section who">
+    <div class="wrap split">
+      <h2>Pour les artisans qui ne peuvent pas toujours décrocher</h2>
+      <div>
+        <p>Menuisiers, plombiers, électriciens, serruriers, peintres, maçons : quand vous avez les mains occupées, un appel manqué est souvent un chantier perdu.</p>
+        <p>L'assistant ne donne pas de prix ferme et ne remplace pas votre rappel. Il prend le message, et vous gardez la relation avec le client.</p>
       </div>
     </div>
   </section>
-  <section class="problem" id="probleme">
+
+  <section class="trial" id="essai">
     <div class="wrap">
-      <div class="section-head">
-        <div class="tag">Le problème</div>
-        <h2>Un métier qui bouge, un téléphone qui ne peut pas suivre</h2>
-        <p>Vous ne pouvez pas décrocher les mains dans un moteur, en haut d'une échelle, ou avec un patient au fauteuil. Le client, lui, n'attend pas.</p>
+      <div>
+        <h2>Deux semaines pour tester, sans engagement.</h2>
+        <p>Dites-moi votre métier et votre zone d'intervention. Je règle l'assistant, vous l'essayez sur vos vrais appels.</p>
+        <a class="btn" href="mailto:contact.noryflow@gmail.com?subject=Essai%20gratuit%20de%202%20semaines&amp;body=Bonjour%2C%0A%0AJe%20suis%20(votre%20m%C3%A9tier)%20%C3%A0%20(votre%20ville).%20J%27aimerais%20essayer%20Noryflow.%0A%0AMon%20num%C3%A9ro%20%3A%20">Demander l'essai gratuit</a>
       </div>
-      <div class="problem-grid">
-        <div class="problem-card"><div class="stat">1 sur 3</div><p>appels non traités par un artisan solo se transforme en client perdu, faute de rappel à temps.</p></div>
-        <div class="problem-card"><div class="stat">24/7</div><p>C'est le rythme des urgences — porte claquée, fuite, panne — mais pas celui de votre disponibilité personnelle.</p></div>
-        <div class="problem-card"><div class="stat">0€</div><p>de secrétariat à temps plein pour la grande majorité des artisans et professions indépendantes.</p></div>
-      </div>
-    </div>
-  </section>
-  <section class="how" id="fonctionnement">
-    <div class="wrap">
-      <div class="section-head">
-        <div class="tag">Comment ça marche</div>
-        <h2>Trois étapes, aucune intervention de votre part</h2>
-        <p>L'agent est configuré une fois avec vos disponibilités et vos informations. Ensuite, il tourne seul.</p>
-      </div>
-      <div class="steps">
-        <div class="step"><div class="num">1</div><h3>Le client appelle</h3><p>Même si vous êtes en intervention, au téléphone, ou fermé pour la journée.</p></div>
-        <div class="step"><div class="num">2</div><h3>L'agent répond et qualifie</h3><p>Il prend le nom, le numéro, la demande — et propose un créneau si besoin, selon votre agenda réel.</p></div>
-        <div class="step"><div class="num">3</div><h3>Vous recevez tout par SMS</h3><p>Coordonnées, demande, créneau confirmé — sans avoir touché votre téléphone.</p></div>
-      </div>
-    </div>
-  </section>
-  <section class="forwho" id="metiers">
-    <div class="wrap">
-      <div class="section-head">
-        <div class="tag">Pour qui</div>
-        <h2>Pensé pour ceux qui travaillent seuls</h2>
-        <p>Un métier de terrain, sans secrétariat, où chaque appel manqué a un coût direct.</p>
-      </div>
-      <div class="trade-list">
-        <div class="trade"><span class="glyph">01</span><span class="label">Plombiers</span></div>
-        <div class="trade"><span class="glyph">02</span><span class="label">Serruriers</span></div>
-        <div class="trade"><span class="glyph">03</span><span class="label">Électriciens</span></div>
-        <div class="trade"><span class="glyph">04</span><span class="label">Chauffagistes</span></div>
-        <div class="trade"><span class="glyph">05</span><span class="label">Vétérinaires indépendants</span></div>
-        <div class="trade"><span class="glyph">06</span><span class="label">Kinés &amp; ostéopathes indépendants</span></div>
-      </div>
-      <p style="margin-top:20px; color:var(--text-on-light-dim); font-size:0.92rem;">Et bien d'autres — tout métier où le téléphone sonne pendant que vos mains sont occupées.</p>
-    </div>
-  </section>
-  <section class="pricing" id="offre">
-    <div class="wrap">
-      <div class="offer">
-        <div>
-          <div class="eyebrow" style="color:var(--brass-bright)">L'offre de lancement</div>
-          <h2>Un essai avant tout engagement</h2>
-          <p>Noryflow configure votre agent, le connecte à votre agenda, et le met en service. Vous jugez sur deux semaines réelles avant de décider.</p>
-          <ul class="offer-list">
-            <li>Configuration entièrement prise en charge</li>
-            <li>Adapté à votre activité, vos horaires, votre ton</li>
-            <li>Confirmation automatique par SMS à chaque client</li>
-            <li>Sans engagement pendant la période d'essai</li>
-          </ul>
-        </div>
-        <div class="offer-card">
-          <div class="sub">Essai gratuit</div>
-          <div class="price">2 <small>semaines</small></div>
-          <div class="sub">Sans frais de mise en place</div>
-          <a href="mailto:contact.noryflow@gmail.com?subject=Demande%20d'essai%20gratuit%20Noryflow&body=Bonjour%2C%0A%0AJe%20souhaite%20d%C3%A9marrer%20l'essai%20gratuit%20de%20deux%20semaines%20avec%20Noryflow.%0A%0AMon%20activit%C3%A9%20%3A%20%0A%0AMerci." class="btn btn-primary" style="width:100%; justify-content:center;">Démarrer l'essai</a>
-        </div>
-      </div>
-    </div>
-  </section>
-  <section class="contact" id="contact">
-    <div class="wrap">
-      <div class="section-head">
-        <div class="tag">Contact</div>
-        <h2>Voir l'agent en action prend dix minutes</h2>
-        <p>Par téléphone, en visio, ou en direct si vous êtes dans le coin.</p>
-      </div>
-      <div class="contact-actions" style="justify-content:center;">
-        <a href="mailto:contact.noryflow@gmail.com?subject=Demande%20de%20d%C3%A9mo%20Noryflow&body=Bonjour%2C%0A%0AJe%20souhaite%20voir%20une%20d%C3%A9monstration%20de%20l'agent%20vocal%20Noryflow.%0A%0AMon%20activit%C3%A9%20%3A%20%0ADisponibilit%C3%A9%20%3A%20%0A%0AMerci." class="btn btn-primary" style="padding:16px 40px;">Écrire pour une démo</a>
-      </div>
-      <div class="contact-detail">Basé en France · démonstrations en visio partout dans le pays</div>
+      <ul class="promises">
+        <li><strong>Vous gardez votre numéro.</strong> Le renvoi d'appel s'active et se désactive depuis votre téléphone.</li>
+        <li><strong>Je règle l'assistant pour votre activité :</strong> métier, services, zone d'intervention.</li>
+        <li><strong>Pour arrêter,</strong> vous désactivez le renvoi d'appel. C'est tout.</li>
+        <li><strong>Vos retours comptent.</strong> Dites ce qui ne va pas, je corrige.</li>
+      </ul>
     </div>
   </section>
 </main>
-<footer>
-  <div class="wrap footer-row">
-    <span>© 2026 Noryflow</span>
-    <span>Agent vocal IA pour artisans et indépendants</span>
+
+<footer class="foot">
+  <div class="wrap">
+    <div>
+      <h2>Contact</h2>
+      <p><a href="mailto:contact.noryflow@gmail.com">contact.noryflow@gmail.com</a></p>
+    </div>
+    <div id="mentions">
+      <h2>Mentions légales</h2>
+      <p>Éditeur : Adel Manat, entrepreneur individuel, exerçant sous le nom commercial Noryflow.</p>
+      <!-- Pour ajouter le SIRET, écrire ici : <p>SIRET : ... </p> -->
+      <p>Hébergement : GitHub Pages (GitHub, Inc.).</p>
+    </div>
   </div>
 </footer>
+
 </body>
 </html>
