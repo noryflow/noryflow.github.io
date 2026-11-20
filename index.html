@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Noryflow : un assistant vocal qui répond aux appels des artisans</title>
-<meta name="description" content="Noryflow décroche quand vous êtes sur un chantier, note le nom, le numéro, l'adresse et la demande, puis vous envoie un résumé par e-mail. Essai de 2 semaines sans engagement.">
+<meta name="description" content="Noryflow décroche quand vous n'avez pas le temps, note le nom, le numéro, l'adresse et la demande, puis vous envoie un résumé par e-mail. Essai de 2 semaines sans engagement.">
 <meta name="theme-color" content="#0D1B4A">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -21,7 +21,7 @@
   "name": "Noryflow",
   "url": "https://noryflow.github.io/",
   "email": "contact.noryflow@gmail.com",
-  "description": "Assistant vocal qui répond aux appels manqués des artisans et leur envoie un résumé par e-mail.",
+  "description": "Assistant vocal qui répond aux appels manqués des artisans et des PME et leur envoie un résumé par e-mail.",
   "areaServed": "FR"
 }
 </script>
@@ -69,10 +69,9 @@ a { color: inherit; }
 
 /* En-tête */
 .top { background: var(--navy); color: var(--white); }
-.top .wrap { display: flex; align-items: center; justify-content: space-between; padding-block: 0.9rem; }
+.top .wrap { display: flex; align-items: center; justify-content: space-between; padding-block: 1rem; }
 .brand { display: flex; align-items: center; gap: 0.85rem; text-decoration: none; }
-.brand img { height: 5.5rem; width: auto; display: block; }
-@media (min-width: 52rem) { .brand img { height: 7rem; } }
+.brand img { width: 2.5rem; height: 2.5rem; border-radius: 0.5rem; }
 .brand span { font-weight: 300; letter-spacing: 0.24em; font-size: 0.95rem; }
 .top-link { font-weight: 600; font-size: 0.95rem; text-decoration: none; border-bottom: 2px solid var(--signal); padding-bottom: 2px; }
 
@@ -143,6 +142,12 @@ a { color: inherit; }
 .step p { margin: 0; }
 
 .split { display: grid; gap: 1.5rem; }
+.opt-title { margin: 0 0 0.5rem; font-size: 1.2rem; font-weight: 700; }
+.opts { margin: 0; padding: 0; list-style: none; }
+.opts li { position: relative; padding: 0.85rem 0 0.85rem 1.4rem; border-top: 1px solid var(--line-on-paper); color: var(--text-on-paper); }
+.opts li::before { content: ""; position: absolute; left: 0; top: 1.4rem; width: 0.5rem; height: 0.5rem; background: var(--signal); }
+.opts strong { color: var(--navy); font-weight: 700; }
+.opt-note { margin-top: 1.5rem; }
 .who { background: var(--white); }
 
 /* Essai */
@@ -185,7 +190,8 @@ a { color: inherit; }
 <header class="top">
   <div class="wrap">
     <a class="brand" href="#" aria-label="Noryflow, accueil">
-      <img src="header-logo.png" alt="Noryflow" width="108" height="112">
+      <img src="apple-touch-icon.png" alt="" width="40" height="40">
+      <span>NORYFLOW</span>
     </a>
     <a class="top-link" href="mailto:contact.noryflow@gmail.com">Contact</a>
   </div>
@@ -195,7 +201,7 @@ a { color: inherit; }
   <section class="hero">
     <div class="wrap">
       <div>
-        <h1>Vous êtes sur un chantier. Votre assistant décroche.</h1>
+        <h1>Vous êtes en pleine activité. Votre assistant décroche.</h1>
         <p class="lead">Noryflow répond aux appels que vous ne pouvez pas prendre. Il note le nom, le numéro, l'adresse et la demande du client, puis vous envoie un résumé par <span style="white-space:nowrap">e-mail</span>.</p>
         <div class="actions">
           <a class="btn" href="mailto:contact.noryflow@gmail.com?subject=Essai%20gratuit%20de%202%20semaines&amp;body=Bonjour%2C%0A%0AJe%20suis%20(votre%20m%C3%A9tier)%20%C3%A0%20(votre%20ville).%20J%27aimerais%20essayer%20Noryflow.%0A%0AMon%20num%C3%A9ro%20%3A%20">Demander l'essai gratuit</a>
@@ -209,7 +215,7 @@ a { color: inherit; }
           <div class="row"><dt>Nom</dt><dd>Durand</dd></div>
           <div class="row"><dt>Prénom</dt><dd>Marie</dd></div>
           <div class="row"><dt>Téléphone</dt><dd>06 12 34 56 78</dd></div>
-          <div class="row"><dt>Adresse</dt><dd>14 rue de Naples, Paris 75008</dd></div>
+          <div class="row"><dt>Adresse</dt><dd>14 rue de Naples, 75008 Paris</dd></div>
           <div class="row"><dt>Motif</dt><dd>Rénovation de cuisine</dd></div>
           <div class="row"><dt>Urgent</dt><dd><span class="urgent">OUI</span></dd></div>
         </dl>
@@ -229,7 +235,7 @@ a { color: inherit; }
         <li class="step">
           <span class="step-num" aria-hidden="true">2</span>
           <h3>L'assistant décroche</h3>
-          <p>Il se présente au nom de votre entreprise, demande le nom, le numéro, l'adresse du chantier et ce que veut le client, puis fait un récapitulatif pour vérifier.</p>
+          <p>Il se présente au nom de votre entreprise, demande le nom, le numéro, l'adresse et ce que veut le client, puis fait un récapitulatif pour vérifier.</p>
         </li>
         <li class="step">
           <span class="step-num" aria-hidden="true">3</span>
@@ -240,12 +246,24 @@ a { color: inherit; }
     </div>
   </section>
 
+  <section class="section" id="options">
+    <div class="wrap">
+      <h2>En option : ce que fait votre agent</h2>
+      <ul class="opts">
+        <li><strong>Il s'occupe de la prise de rendez-vous.</strong></li>
+        <li><strong>Il pose des questions adaptées à votre métier.</strong></li>
+        <li><strong>Il renvoie l'appel vers vous si le client veut vous parler tout de suite,</strong> en cas d'urgence ultime.</li>
+      </ul>
+      <p style="margin-top:1.75rem"><a class="btn" href="mailto:contact.noryflow@gmail.com?subject=Demande%20de%20devis%20Noryflow&amp;body=Bonjour%2C%0A%0AJe%20souhaite%20un%20devis%20pour%20un%20assistant%20vocal%20Noryflow.%0A%0AMon%20activit%C3%A9%20%28m%C3%A9tier%2C%20ville%29%20%3A%20%0AMon%20num%C3%A9ro%20%3A%20%0ANombre%20d%27appels%20re%C3%A7us%20par%20semaine%20%28environ%29%20%3A%20%0AOptions%20qui%20m%27int%C3%A9ressent%20%28prise%20de%20rendez-vous%2C%20transfert%20d%27appel%20en%20cas%20d%27urgence%2C%20questions%20adapt%C3%A9es%20%C3%A0%20mon%20m%C3%A9tier%2C%20num%C3%A9ro%20fran%C3%A7ais%20d%C3%A9di%C3%A9%29%20%3A%20%0APrix%20fixes%20que%20l%27assistant%20pourrait%20donner%20%C3%A0%20mes%20clients%20%28tarif%20horaire%2C%20produits...%29%20%3A%20%0AAutre%20%3A%20%0A">Demander un devis</a></p>
+    </div>
+  </section>
+
   <section class="section who">
     <div class="wrap split">
-      <h2>Pour les artisans qui ne peuvent pas toujours décrocher</h2>
+      <h2>Pour les artisans et les PME qui ne peuvent pas toujours décrocher</h2>
       <div>
-        <p>Menuisiers, plombiers, électriciens, serruriers, peintres, maçons : quand vous avez les mains occupées, un appel manqué est souvent un chantier perdu.</p>
-        <p>L'assistant ne donne pas de prix ferme et ne remplace pas votre rappel. Il prend le message, et vous gardez la relation avec le client.</p>
+        <p>Artisans, commerçants, PME : quand vous êtes occupé, un appel manqué est souvent un client perdu.</p>
+        <p>L'assistant ne fait pas de devis : pour un chiffrage, il prend le message et vous rappelez. En revanche, si vous avez des prix fixes (un tarif horaire, un produit, une prestation), il peut les donner à vos clients. Tout est réglable selon votre activité, et vous gardez la relation avec le client.</p>
       </div>
     </div>
   </section>
@@ -258,9 +276,8 @@ a { color: inherit; }
         <a class="btn" href="mailto:contact.noryflow@gmail.com?subject=Essai%20gratuit%20de%202%20semaines&amp;body=Bonjour%2C%0A%0AJe%20suis%20(votre%20m%C3%A9tier)%20%C3%A0%20(votre%20ville).%20J%27aimerais%20essayer%20Noryflow.%0A%0AMon%20num%C3%A9ro%20%3A%20">Demander l'essai gratuit</a>
       </div>
       <ul class="promises">
-        <li><strong>Vous gardez votre numéro.</strong> Le renvoi d'appel s'active et se désactive depuis votre téléphone.</li>
+        <li><strong>Vous gardez votre numéro.</strong></li>
         <li><strong>Je règle l'assistant pour votre activité :</strong> métier, services, zone d'intervention.</li>
-        <li><strong>Pour arrêter,</strong> vous désactivez le renvoi d'appel. C'est tout.</li>
         <li><strong>Vos retours comptent.</strong> Dites ce qui ne va pas, je corrige.</li>
       </ul>
     </div>
@@ -275,7 +292,7 @@ a { color: inherit; }
     </div>
     <div id="mentions">
       <h2>Mentions légales</h2>
-      <p>Éditeur : Adel Manat, entrepreneur individuel, exerçant sous le nom commercial Noryflow.</p>
+      <p>Éditeur : Noryflow, entreprise individuelle.</p>
       <!-- Pour ajouter le SIRET, écrire ici : <p>SIRET : ... </p> -->
       <p>Hébergement : GitHub Pages (GitHub, Inc.).</p>
     </div>
